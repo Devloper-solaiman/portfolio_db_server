@@ -23,33 +23,49 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true,
 
 });
-const run = async() => {
+const run = async () => {
     try {
         await client.connect();
         console.log("Connected to MongoDB");
 
         const db = client.db("portfolio")
         const collection = db.collection("data")
-        const projectCollection = db.collection('project');
+        const ProjectCollection = db.collection('project');
 
 
 
-        app.post("/api/v1/project", async(req, res) => {
-            const { image, title, category, amount, description } = req.body;
-            const result = await projectCollection.insertOne({
-                image,
-                title,
-                category,
-                amount,
-                description,
-            });
+        app.post("/api/v1/project", async (req, res) => {
+            const { _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description } = req.body;
+            const result = await ProjectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
             res.json({
                 success: true,
-                message: "Successfully donation create!",
+                message: "Successfully Project create!",
                 result,
             });
         });
-    } finally {}
+
+        app.get("/api/v1/project", async (req, res) => {
+            const data = await ProjectCollection.find({}).toArray();
+            res.json({
+                success: true,
+                message: "successfully retrieve Projects!",
+                data,
+            });
+        });
+
+        app.delete("/api/v1/project/:id", async (req, res) => {
+            const { id } = req.params;
+            const data = await ProjectCollection.deleteOne({
+                _id: new ObjectId(id),
+            });
+            res.json({
+                success: true,
+                message: "successfully delete donation!",
+                data,
+            });
+        });
+
+    } finally { }
 }
 run().catch(console.dir)
 
