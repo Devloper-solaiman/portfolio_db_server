@@ -30,13 +30,14 @@ const run = async () => {
 
         const db = client.db("portfolio")
         const collection = db.collection("data")
-        const ProjectCollection = db.collection('project');
+        const projectCollection = db.collection('project');
+        const skillCollection = db.collection('skill');
 
 
 
         app.post("/api/v1/project", async (req, res) => {
             const { _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description } = req.body;
-            const result = await ProjectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
+            const result = await projectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
             res.json({
                 success: true,
                 message: "Successfully Project create!",
@@ -45,17 +46,16 @@ const run = async () => {
         });
 
         app.get("/api/v1/project", async (req, res) => {
-            const data = await ProjectCollection.find({}).toArray();
+            const data = await projectCollection.find({}).toArray();
             res.json({
                 success: true,
                 message: "successfully retrieve Projects!",
                 data,
             });
         });
-
         app.delete("/api/v1/project/:id", async (req, res) => {
             const { id } = req.params;
-            const data = await ProjectCollection.deleteOne({
+            const data = await projectCollection.deleteOne({
                 _id: new ObjectId(id),
             });
             res.json({
@@ -65,6 +65,17 @@ const run = async () => {
             });
         });
 
+
+
+        app.post("/api/v1/skill", async (req, res) => {
+            const { _id, image, skillName, percentage } = req.body;
+            const result = await projectCollection.insertOne({ _id, image, skillName, percentage });
+            res.json({
+                success: true,
+                message: "Successfully Skill create!",
+                result,
+            });
+        });
     } finally { }
 }
 run().catch(console.dir)
