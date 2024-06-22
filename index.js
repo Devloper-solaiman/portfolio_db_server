@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true,
 
 });
-const run = async () => {
+const run = async() => {
     try {
         await client.connect();
         console.log("Connected to MongoDB");
@@ -35,7 +35,7 @@ const run = async () => {
 
 
 
-        app.post("/api/v1/project", async (req, res) => {
+        app.post("/api/v1/project", async(req, res) => {
             const { _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description } = req.body;
             const result = await projectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
             res.json({
@@ -45,7 +45,7 @@ const run = async () => {
             });
         });
 
-        app.get("/api/v1/project", async (req, res) => {
+        app.get("/api/v1/project", async(req, res) => {
             const data = await projectCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -53,30 +53,53 @@ const run = async () => {
                 data,
             });
         });
-        app.delete("/api/v1/project/:id", async (req, res) => {
+        app.delete("/api/v1/project/:id", async(req, res) => {
             const { id } = req.params;
             const data = await projectCollection.deleteOne({
                 _id: new ObjectId(id),
             });
             res.json({
                 success: true,
-                message: "successfully delete donation!",
+                message: "successfully delete project!",
                 data,
             });
         });
 
 
+        // skill worker
 
-        app.post("/api/v1/skill", async (req, res) => {
+        app.post("/api/v1/skill", async(req, res) => {
             const { _id, image, skillName, percentage } = req.body;
-            const result = await projectCollection.insertOne({ _id, image, skillName, percentage });
+            const result = await skillCollection.insertOne({ _id, image, skillName, percentage });
             res.json({
                 success: true,
                 message: "Successfully Skill create!",
                 result,
             });
         });
-    } finally { }
+
+        app.get("/api/v1/skill", async(req, res) => {
+            const data = await skillCollection.find({}).toArray();
+            res.json({
+                success: true,
+                message: "successfully retrieve Skills!",
+                data,
+            });
+        });
+
+        app.delete("/api/v1/skill/:id", async(req, res) => {
+            const { id } = req.params;
+            const data = await skillCollection.deleteOne({
+                _id: new ObjectId(id),
+            });
+            res.json({
+                success: true,
+                message: "successfully delete project!",
+                data,
+            });
+        });
+
+    } finally {}
 }
 run().catch(console.dir)
 
