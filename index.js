@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000
 
 // Middleware
 app.use(cors({
-    origin: 'https://localhost:5000',
+    origin: 'https://portfoliodbserver.vercel.app',
     credentials: true
 }));
 app.use(express.json());
@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true,
 
 });
-const run = async() => {
+const run = async () => {
     try {
         await client.connect();
         console.log("Connected to MongoDB");
@@ -36,7 +36,7 @@ const run = async() => {
 
 
         // project selection
-        app.post("/api/v1/project", async(req, res) => {
+        app.post("/api/v1/project", async (req, res) => {
             const { _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description } = req.body;
             const result = await projectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
             res.json({
@@ -46,7 +46,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/project", async(req, res) => {
+        app.get("/api/v1/project", async (req, res) => {
             const data = await projectCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -54,7 +54,7 @@ const run = async() => {
                 data,
             });
         });
-        app.delete("/api/v1/project/:id", async(req, res) => {
+        app.delete("/api/v1/project/:id", async (req, res) => {
             const { id } = req.params;
             const data = await projectCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -69,7 +69,7 @@ const run = async() => {
 
         // skill section
 
-        app.post("/api/v1/skill", async(req, res) => {
+        app.post("/api/v1/skill", async (req, res) => {
             const { _id, image, skillName, percentage } = req.body;
             const result = await skillCollection.insertOne({ _id, image, skillName, percentage });
             res.json({
@@ -79,7 +79,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/skill", async(req, res) => {
+        app.get("/api/v1/skill", async (req, res) => {
             const data = await skillCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -88,7 +88,7 @@ const run = async() => {
             });
         });
 
-        app.delete("/api/v1/skill/:id", async(req, res) => {
+        app.delete("/api/v1/skill/:id", async (req, res) => {
             const { id } = req.params;
             const data = await skillCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -103,7 +103,7 @@ const run = async() => {
 
         // Blog section
 
-        app.post("/api/v1/blog", async(req, res) => {
+        app.post("/api/v1/blog", async (req, res) => {
             const { _id, image, title, readingTime, author, technology, shortDescription, description, publishDate, createdAt, } = req.body;
             const result = await blogCollection.insertOne({ _id, image, title, readingTime, author, technology, shortDescription, description, publishDate, createdAt, });
             res.json({
@@ -113,7 +113,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/blog", async(req, res) => {
+        app.get("/api/v1/blog", async (req, res) => {
             const data = await blogCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -122,7 +122,7 @@ const run = async() => {
             });
         });
 
-        app.delete("/api/v1/blog/:id", async(req, res) => {
+        app.delete("/api/v1/blog/:id", async (req, res) => {
             const { id } = req.params;
             const data = await blogCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -135,7 +135,7 @@ const run = async() => {
         });
 
 
-    } finally {}
+    } finally { }
 }
 run().catch(console.dir)
 
