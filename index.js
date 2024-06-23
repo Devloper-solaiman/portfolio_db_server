@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 });
 const run = async () => {
     try {
-        await client.connect();
+        client.connect();
         console.log("Connected to MongoDB");
 
         const db = client.db("portfolio")
