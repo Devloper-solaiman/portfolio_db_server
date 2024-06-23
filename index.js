@@ -8,10 +8,17 @@ const app = express();
 const port = process.env.PORT || 5000
 
 // Middleware
-app.use(cors({
-    origin: 'https://portfoliodbserver.vercel.app',
-    credentials: true
-}));
+const corsConfig = {
+    origin: '*',
+    credential: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+}
+app.options("", cors(corsConfig))
+app.use(cors(corsConfig))
+// app.use(cors({
+//     origin: 'https://portfoliodbserver.vercel.app',
+//     credentials: true
+// }));
 app.use(express.json());
 
 
