@@ -55,6 +55,16 @@ const run = async () => {
                 data,
             });
         });
+        app.get("/api/v1/project/:id", async (req, res) => {
+            const { id } = req.params;
+            const data = await projectCollection.findOne(new ObjectId(id));
+            res.json({
+                success: true,
+                message: "successfully retrieve single Project!",
+                data,
+            });
+        });
+
         app.delete("/api/v1/project/:id", async (req, res) => {
             const { id } = req.params;
             const data = await projectCollection.deleteOne({
@@ -122,7 +132,15 @@ const run = async () => {
                 data,
             });
         });
-
+        app.get("/api/v1/blog/:id", async (req, res) => {
+            const { id } = req.params;
+            const data = await blogCollection.findOne(new ObjectId(id));
+            res.json({
+                success: true,
+                message: "successfully retrieve single blog!",
+                data,
+            });
+        });
         app.delete("/api/v1/blog/:id", async (req, res) => {
             const { id } = req.params;
             const data = await blogCollection.deleteOne({
