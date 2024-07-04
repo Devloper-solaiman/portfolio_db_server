@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true,
 
 });
-const run = async() => {
+const run = async () => {
     try {
         client.connect();
         console.log("Connected to MongoDB");
@@ -33,11 +33,12 @@ const run = async() => {
         const collection = db.collection("data")
         const projectCollection = db.collection('project');
         const skillCollection = db.collection('skill');
+        const contactCollection = db.collection('contact');
         const blogCollection = db.collection('blog');
 
 
         // project selection
-        app.post("/api/v1/project", async(req, res) => {
+        app.post("/api/v1/project", async (req, res) => {
             const { _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description } = req.body;
             const result = await projectCollection.insertOne({ _id, image, title, liveLink, clientLink, serverLink, technology, keyFeature, ratting, description });
             res.json({
@@ -47,7 +48,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/project", async(req, res) => {
+        app.get("/api/v1/project", async (req, res) => {
             const data = await projectCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -55,7 +56,7 @@ const run = async() => {
                 data,
             });
         });
-        app.get("/api/v1/projects/:id", async(req, res) => {
+        app.get("/api/v1/projects/:id", async (req, res) => {
             const { id } = req.params;
             const data = await projectCollection.findOne(new ObjectId(id));
             res.json({
@@ -65,7 +66,7 @@ const run = async() => {
             });
         });
 
-        app.delete("/api/v1/project/:id", async(req, res) => {
+        app.delete("/api/v1/project/:id", async (req, res) => {
             const { id } = req.params;
             const data = await projectCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -80,7 +81,7 @@ const run = async() => {
 
         // skill section
 
-        app.post("/api/v1/skill", async(req, res) => {
+        app.post("/api/v1/skill", async (req, res) => {
             const { _id, image, skillName, percentage } = req.body;
             const result = await skillCollection.insertOne({ _id, image, skillName, percentage });
             res.json({
@@ -90,7 +91,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/skill", async(req, res) => {
+        app.get("/api/v1/skill", async (req, res) => {
             const data = await skillCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -99,7 +100,7 @@ const run = async() => {
             });
         });
 
-        app.delete("/api/v1/skill/:id", async(req, res) => {
+        app.delete("/api/v1/skill/:id", async (req, res) => {
             const { id } = req.params;
             const data = await skillCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -111,10 +112,43 @@ const run = async() => {
             });
         });
 
+        // contact section
+
+        app.post("/api/v1/contact", async (req, res) => {
+            const { _id, senderEmail, message } = req.body;
+            const result = await contactCollection.insertOne({ _id, senderEmail, message });
+            res.json({
+                success: true,
+                message: "Successfully contact create!",
+                result,
+            });
+        });
+
+        app.get("/api/v1/contact", async (req, res) => {
+            const data = await contactCollection.find({}).toArray();
+            res.json({
+                success: true,
+                message: "successfully retrieve Contact!",
+                data,
+            });
+        });
+
+        app.delete("/api/v1/contact/:id", async (req, res) => {
+            const { id } = req.params;
+            const data = await contactCollection.deleteOne({
+                _id: new ObjectId(id),
+            });
+            res.json({
+                success: true,
+                message: "successfully delete Contact!",
+                data,
+            });
+        });
+
 
         // Blog section
 
-        app.post("/api/v1/blog", async(req, res) => {
+        app.post("/api/v1/blog", async (req, res) => {
             const { _id, image, title, readingTime, author, technology, shortDescription, description, publishDate, createdAt, } = req.body;
             const result = await blogCollection.insertOne({ _id, image, title, readingTime, author, technology, shortDescription, description, publishDate, createdAt, });
             res.json({
@@ -124,7 +158,7 @@ const run = async() => {
             });
         });
 
-        app.get("/api/v1/blog", async(req, res) => {
+        app.get("/api/v1/blog", async (req, res) => {
             const data = await blogCollection.find({}).toArray();
             res.json({
                 success: true,
@@ -132,7 +166,7 @@ const run = async() => {
                 data,
             });
         });
-        app.get("/api/v1/blogs/:id", async(req, res) => {
+        app.get("/api/v1/blogs/:id", async (req, res) => {
             const { id } = req.params;
             const data = await blogCollection.findOne(new ObjectId(id));
             res.json({
@@ -141,7 +175,7 @@ const run = async() => {
                 data,
             });
         });
-        app.delete("/api/v1/blog/:id", async(req, res) => {
+        app.delete("/api/v1/blog/:id", async (req, res) => {
             const { id } = req.params;
             const data = await blogCollection.deleteOne({
                 _id: new ObjectId(id),
@@ -154,7 +188,7 @@ const run = async() => {
         });
 
 
-    } finally {}
+    } finally { }
 }
 run().catch(console.dir)
 
