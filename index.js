@@ -115,8 +115,8 @@ const run = async () => {
         // contact section
 
         app.post("/api/v1/contact", async (req, res) => {
-            const { _id, senderEmail, message } = req.body;
-            const result = await contactCollection.insertOne({ _id, senderEmail, message });
+            const { _id, senderEmail, message, name } = req.body;
+            const result = await contactCollection.insertOne({ _id, senderEmail, message, name });
             res.json({
                 success: true,
                 message: "Successfully contact create!",
